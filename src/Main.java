@@ -13,33 +13,35 @@ public class Main extends JFrame {
     }
 
     class Canvas extends JPanel {
-        Grid grid = new Grid();
-        LinkedList<Point> mouseTrail = new LinkedList<>();  // List to store mouse positions
-
-        public Canvas() {
-            setPreferredSize(new Dimension(720, 720));
-        }
-
-        @Override
-        public void paint(Graphics g) {
-            Point mousePos = getMousePosition();
-            if (mousePos != null) {
-                mouseTrail.addFirst(mousePos);  // Add current mouse position
-                if (mouseTrail.size() > 100) {
-                    mouseTrail.removeLast();  // Limit to 100 positions
-                }
-            }
-
-            // Draw the grid first
-            grid.paint(g, mousePos);
-
-            // Draw mouse trails on top of the grid
-            g.setColor(new Color(0, 0, 0, 128));  // Semi-transparent black color
-            for (Point p : mouseTrail) {
-                g.fillOval(p.x - 10, p.y - 10, 20, 20);
-            }
-        }
-    }
+      Grid grid = new Grid();
+      LinkedList<Point> mouseTrail = new LinkedList<>();  // List to store mouse positions
+      Point lastMousePos = null;  // Added to track the last mouse position
+  
+      public Canvas() {
+          setPreferredSize(new Dimension(720, 720));
+      }
+  
+      @Override
+      public void paint(Graphics g) {
+          Point mousePos = getMousePosition();
+          if (mousePos != null && !mousePos.equals(lastMousePos)) {  // Only add if position has changed
+              mouseTrail.addFirst(mousePos);  // Add current mouse position if it has moved
+              lastMousePos = mousePos;  // Update lastMousePos
+              if (mouseTrail.size() > 100) {
+                  mouseTrail.removeLast();  // Limit to 100 positions
+              }
+          }
+  
+          // Draw the grid first
+          grid.paint(g, mousePos);
+  
+          // Draw mouse trails on top of the grid
+          g.setColor(new Color(0, 0, 0, 128));  // Semi-transparent black color
+          for (Point p : mouseTrail) {
+              g.fillOval(p.x - 10, p.y - 10, 20, 20);
+          }
+      }
+  }
 
     private Main() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
