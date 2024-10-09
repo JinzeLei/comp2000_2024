@@ -14,8 +14,8 @@ public class Main extends JFrame {
 
     class Canvas extends JPanel {
       Grid grid = new Grid();
-      LinkedList<Point> mouseTrail = new LinkedList<>();  // List to store mouse positions
-      Point lastMousePos = null;  // Added to track the last mouse position
+      LinkedList<Point> mouseTrail = new LinkedList<>();  
+      Point lastMousePos = null;  
   
       public Canvas() {
           setPreferredSize(new Dimension(720, 720));
@@ -24,19 +24,17 @@ public class Main extends JFrame {
       @Override
       public void paint(Graphics g) {
           Point mousePos = getMousePosition();
-          if (mousePos != null && !mousePos.equals(lastMousePos)) {  // Only add if position has changed
-              mouseTrail.addFirst(mousePos);  // Add current mouse position if it has moved
-              lastMousePos = mousePos;  // Update lastMousePos
+          if (mousePos != null && !mousePos.equals(lastMousePos)) { 
+              mouseTrail.addFirst(mousePos); 
+              lastMousePos = mousePos;  
               if (mouseTrail.size() > 100) {
-                  mouseTrail.removeLast();  // Limit to 100 positions
+                  mouseTrail.removeLast(); 
               }
           }
   
-          // Draw the grid first
           grid.paint(g, mousePos);
   
-          // Draw mouse trails on top of the grid
-          g.setColor(new Color(0, 0, 0, 128));  // Semi-transparent black color
+          g.setColor(new Color(0, 0, 0, 128));  
           for (Point p : mouseTrail) {
               g.fillOval(p.x - 10, p.y - 10, 20, 20);
           }
@@ -55,7 +53,7 @@ public class Main extends JFrame {
         while (true) {
             repaint();
             try {
-                Thread.sleep(16);  // Limit to ~60 FPS
+                Thread.sleep(16);  
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
